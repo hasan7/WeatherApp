@@ -4,15 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/darkBlue"
+
     >
 
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/darkBlue"
     android:padding="20dp"
     android:gravity="top|center"
+
     >
 
     <ProgressBar
@@ -40,12 +42,20 @@
             android:padding="10dp"
             >
 
+
             <TextView
                 android:layout_gravity="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/weather_date"
                 android:textColor="@color/white"
+                />
+            <ImageView
+                android:layout_gravity="end"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/get_location"
+                android:src="@android:drawable/ic_dialog_map"
                 />
 
             <ImageView
@@ -59,8 +69,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/weather_temp"
                 android:textColor="@color/white"
-                android:textSize="50sp"
-                android:padding="10dp"
+                android:textSize="45sp"
+                android:padding="5dp"
                 />
 
             <TextView

@@ -39,24 +39,6 @@ class LocationTrackerImpl @Inject constructor(
             return null
         }
 
-        // TODO: hmm try diffrent coroutines like the one below, whats the diffrance
-//        coroutineScope {
-//            val x = async {
-//                locationClient.lastLocation.addOnSuccessListener {
-//                    return@addOnSuccessListener
-//
-//                }
-//                    .addOnFailureListener {
-//                        return@addOnFailureListener
-//                    }
-//                    .addOnCanceledListener {
-//                        return@addOnCanceledListener
-//                    }
-//            }.await()
-//            return@coroutineScope x
-//        }
-
-
             return suspendCancellableCoroutine { continuation ->
                 locationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY,
                     object : CancellationToken() {
@@ -68,8 +50,8 @@ class LocationTrackerImpl @Inject constructor(
                         override fun isCancellationRequested(): Boolean {
                             return false
                         }
-
-                    }).addOnSuccessListener { location -> continuation.resume(location) }
+                    }
+                ).addOnSuccessListener { location -> continuation.resume(location) }
                     .addOnFailureListener {  continuation.resume(null) }
                     .addOnCanceledListener { continuation.cancel() }
 //                locationClient.lastLocation.addOnSuccessListener { location ->
@@ -82,7 +64,6 @@ class LocationTrackerImpl @Inject constructor(
 //                    .addOnCanceledListener {
 //                        continuation.cancel()
 //                    }
-        }
-
+            }
     }
 }

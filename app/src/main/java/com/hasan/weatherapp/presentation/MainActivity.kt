@@ -1,30 +1,26 @@
 package com.hasan.weatherapp.presentation
 
 import android.Manifest
-import android.content.ContentValues.TAG
-
+import android.R
+import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
-
 import android.view.View
+import android.view.Window
 import androidx.activity.ComponentActivity
-
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-
+import com.hasan.weatherapp.databinding.ActivitySplashScreenBinding
 import com.hasan.weatherapp.databinding.ActivtyMainBinding
-
 import dagger.hilt.android.AndroidEntryPoint
-
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -48,9 +44,16 @@ class MainActivity : ComponentActivity() {
         val weatherDrop = binding.dropText
         val weatherWind = binding.windText
         val progressBar = binding.progressBar
-        val cardview = binding.cardView
+        val getCurrentLocation = binding.getLocation
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val linearLayoutManager2 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val splashScreen = ActivitySplashScreenBinding.inflate(layoutInflater)
+        val dialog = Dialog(this@MainActivity, R.style.Theme_Black_NoTitleBar_Fullscreen)
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(splashScreen.root)
+        dialog.setCancelable(true)
+        dialog.show()
 
 
         permissionLauncher = registerForActivityResult(
@@ -58,9 +61,9 @@ class MainActivity : ComponentActivity() {
         ) {
             if (!it.containsValue(false)) {
                 viewModel.getWeatherBylocation()
+
             } else{
                 weatherTemp.text = "please allow permissions!"
-                progressBar.visibility = View.INVISIBLE
             }
         }
         permissionLauncher.launch(arrayOf(
@@ -76,14 +79,22 @@ class MainActivity : ComponentActivity() {
         binding.hourlyWeatherRecyclerviewTomorrow.adapter = adapter2
         binding.hourlyWeatherRecyclerviewTomorrow.layoutManager = linearLayoutManager2
 
+        getCurrentLocation.setOnClickListener {
+            viewModel.getCurrentLocation()
+        }
+
         lifecycleScope.launch {
             viewModel.weatherState.collect {
 
                     if(!it.Loading){
                         progressBar.visibility = View.INVISIBLE
+                       if (dialog.isShowing) {
+                           dialog.hide()
+                       }
+                    }else {
+                        progressBar.visibility = View.VISIBLE
                     }
                 if(it.weatherInfo != null){
-                    cardview.visibility = View.VISIBLE
                     weatherDate.text = "last update "+it.weatherInfo?.currentWeatherData?.time?.format(DateTimeFormatter.ofPattern("HH:mm"))
                     weatherImg.setImageResource(it.weatherInfo?.currentWeatherData?.weatherType?.iconRes!!)
                     weatherTemp.text = it.weatherInfo?.currentWeatherData?.temperatureCelsius.toString()+"°C"
@@ -97,6 +108,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
     }
 }

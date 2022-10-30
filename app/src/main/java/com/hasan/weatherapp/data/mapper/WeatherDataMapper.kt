@@ -42,6 +42,54 @@ fun WeatherDto.toWeatherInfo(): WeatherInfo {
     }
     return WeatherInfo(
         weatherDataPerDay = weatherDataMap,
-        currentWeatherData = currentWeatherData
+        currentWeatherData = currentWeatherData,
     )
 }
+
+//suspend fun WeatherDao.toWeatherInfo(): WeatherInfo {
+//
+//
+////   return gettWeatherInfos().mapIndexed { index, weatherData ->
+////       val temperature = gettWeatherInfos()[index].temperatureCelsius
+////       val weatherCode = gettWeatherInfos()[index].weatherType
+////       val windSpeed = gettWeatherInfos()[index].windSpeed
+////       val pressure = gettWeatherInfos()[index].pressure
+////       val humidity = gettWeatherInfos()[index].humidity
+////       val time = gettWeatherInfos()[index].time
+////       WeatherData(
+////           time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
+////           temperatureCelsius = temperature,
+////           pressure = pressure,
+////           windSpeed = windSpeed,
+////           humidity = humidity,
+////           weatherType = WeatherType.fromWMO(weatherCode)
+////       )
+////   }.groupBy {  }
+////    return time.mapIndexed { index, time ->
+////        val temperature = temperatures[index]
+////        val weatherCode = weatherCodes[index]
+////        val windSpeed = windSpeeds[index]
+////        val pressure = pressures[index]
+////        val humidity = humidities[index]
+////        WeatherData(
+////            time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
+////            temperatureCelsius = temperature,
+////            pressure = pressure,
+////            windSpeed = windSpeed,
+////            humidity = humidity,
+////            weatherType = WeatherType.fromWMO(weatherCode)
+////        )
+////
+////    }.groupBy {
+////        it.time.dayOfMonth
+////    }
+////
+//
+//    val data = mapOf(Pair(LocalDateTime.now().dayOfMonth, gettWeatherInfos()))
+//
+//    return WeatherInfo(
+//        currentWeatherDataListDB = data,
+//        currentWeatherData = null,
+//        weatherDataPerDay = null
+//    )
+//}
