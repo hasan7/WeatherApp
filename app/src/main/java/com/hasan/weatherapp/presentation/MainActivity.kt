@@ -86,6 +86,7 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             viewModel.weatherState.collect {
 
+//                Log.d(TAG, "onCreate: ${it.weatherInfo?.currentWeatherDataListDB}")
                     if(!it.Loading){
                         progressBar.visibility = View.INVISIBLE
                        if (dialog.isShowing) {

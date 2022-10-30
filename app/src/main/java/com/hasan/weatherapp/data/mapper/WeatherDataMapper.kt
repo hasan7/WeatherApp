@@ -1,5 +1,6 @@
 package com.hasan.weatherapp.data.mapper
 
+import com.hasan.weatherapp.data.database.WeatherDao
 import com.hasan.weatherapp.data.remote.WeatherDataDto
 import com.hasan.weatherapp.data.remote.WeatherDto
 import com.hasan.weatherapp.domain.weather.WeatherData
