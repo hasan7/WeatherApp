@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
 import kotlin.math.roundToInt
 
 
@@ -28,7 +29,7 @@ class MainActivity : ComponentActivity() {
     val viewModel: ViewModel by viewModels()
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
     lateinit var binding: ActivtyMainBinding
-
+    lateinit var dialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +37,8 @@ class MainActivity : ComponentActivity() {
         val view = binding.root
         setContentView(view)
 
+        val now =  LocalDateTime.now()
+        val lastMonthDay = now.with(TemporalAdjusters.lastDayOfMonth()).dayOfMonth
         val weatherDate = binding.weatherDate
         val weatherImg = binding.weatherImg
         val weatherTemp = binding.weatherTemp
@@ -48,7 +51,7 @@ class MainActivity : ComponentActivity() {
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val linearLayoutManager2 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val splashScreen = ActivitySplashScreenBinding.inflate(layoutInflater)
-        val dialog = Dialog(this@MainActivity, R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog = Dialog(this@MainActivity, R.style.Theme_Black_NoTitleBar_Fullscreen)
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(splashScreen.root)
@@ -89,9 +92,9 @@ class MainActivity : ComponentActivity() {
 //                Log.d(TAG, "onCreate: ${it.weatherInfo?.currentWeatherDataListDB}")
                     if(!it.Loading){
                         progressBar.visibility = View.INVISIBLE
-                       if (dialog.isShowing) {
+                      if (dialog.isShowing) {
                            dialog.hide()
-                       }
+                      }
                     }else {
                         progressBar.visibility = View.VISIBLE
                     }
@@ -104,10 +107,20 @@ class MainActivity : ComponentActivity() {
                     weatherDrop.text = it.weatherInfo?.currentWeatherData?.humidity?.roundToInt().toString()+"%"
                     weatherWind.text = it.weatherInfo?.currentWeatherData?.windSpeed?.roundToInt().toString()+" km/h"
 
-                    adapter.data = it.weatherInfo?.weatherDataPerDay?.get(LocalDate.now().dayOfMonth)!!.filter { it.time > LocalDateTime.now() }
-                    adapter2.data = it.weatherInfo?.weatherDataPerDay?.get(LocalDate.now().dayOfMonth+1)!!
+                    adapter.data = it.weatherInfo?.weatherDataPerDay?.get(now.dayOfMonth)!!.filter { it.time > now }
+
+                    if(now.dayOfMonth == lastMonthDay){
+                        adapter2.data = it.weatherInfo?.weatherDataPerDay?.get(1)!!
+                    }else{
+                        adapter2.data = it.weatherInfo?.weatherDataPerDay?.get(LocalDate.now().dayOfMonth+1)!!
+                    }
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dialog.dismiss()
     }
 }

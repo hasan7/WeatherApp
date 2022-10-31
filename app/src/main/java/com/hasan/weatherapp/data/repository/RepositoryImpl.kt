@@ -28,7 +28,6 @@ class RepositoryImpl @Inject constructor(
         val list = dao.gettWeatherInfos().first()
         return (list[list.size-1].time < now)
 
-
     }
 
     private suspend fun WeatherDataFromDb(): WeatherInfo = withContext(Dispatchers.IO){
