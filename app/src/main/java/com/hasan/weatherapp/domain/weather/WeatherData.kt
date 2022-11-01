@@ -15,15 +15,4 @@ data class WeatherData(
     val weatherType: WeatherType,
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null
-) {
-//    fun toWeatherEntity(): WeatherEntity {
-//        return  WeatherEntity(
-//            time = time,
-//            temperatureCelsius = temperatureCelsius,
-//            pressure = pressure,
-//            windSpeed = windSpeed,
-//            humidity = humidity,
-//            weatherType = weatherType
-//        )
-//    }
-}
+)

@@ -21,11 +21,8 @@ class ViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-
     private var _weatherState = MutableStateFlow(WeatherState())
     val weatherState = _weatherState.asStateFlow()
-
-
 
       fun getWeatherBylocation() {
 

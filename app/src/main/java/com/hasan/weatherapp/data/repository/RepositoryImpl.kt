@@ -1,7 +1,6 @@
 package com.hasan.weatherapp.data.repository
 
-import android.content.ContentValues.TAG
-import android.util.Log
+
 import com.hasan.weatherapp.data.database.WeatherDatabase
 import com.hasan.weatherapp.data.database.entity.LocationEntity
 import com.hasan.weatherapp.data.mapper.toWeatherInfo
@@ -27,7 +26,6 @@ class RepositoryImpl @Inject constructor(
     override suspend fun isOutdated(): Boolean {
         val list = dao.gettWeatherInfos().first()
         return (list[list.size-1].time < now)
-
     }
 
     private suspend fun WeatherDataFromDb(): WeatherInfo = withContext(Dispatchers.IO){
@@ -65,15 +63,13 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun getWeatherInfo(lat: Double, long: Double): Resource<WeatherInfo> {
-        Log.d(TAG, "isLocationRequested: ${isLocationRequested()}")
 
         return try {
             if (WeatherDataFromDb().weatherDataPerDay?.isEmpty() == true){
-                Log.d(TAG, "getWeatherInfo: hello")
+
                 val weatherDataApi = WeatherDataFromApi(lat = lat, long = long)
                 weatherDataApi.weatherDataPerDay?.forEach {
                 it.value.forEach {
-                    //Log.d(TAG, "api: ${it}")
                     dao.insertWeatherInfos(it)
                 }
             }
@@ -85,47 +81,6 @@ class RepositoryImpl @Inject constructor(
                     data = WeatherDataFromDb()
                 )
             }
-//            if (dao.gettWeatherInfos().isNotEmpty()){
-//                val dataa = mapOf(Pair(LocalDateTime.now().dayOfMonth, dao.gettWeatherInfos()))
-//
-////                return  Resource.Success(
-////                    data = WeatherInfo(
-////                        currentWeatherDataListDB = dataa,
-////                        currentWeatherData = null,
-////                        weatherDataPerDay = null
-////                    )
-////                )
-////                Log.d(TAG, "getWeatherInfo isNotEmpty")
-//                val dataDB =  dao.gettWeatherInfos().size
-//                Log.d(TAG, "db: ${dataDB}")
-//            }
-
-            //val dataApi =  weatherApi.getWeatherData(lat = lat, long = long).toWeatherInfo()
-            //Log.d(TAG, "fromListToMap: ${fromListToMap().get(27)?.get(23)}")
-//            fromListToMap().forEach {
-//                Log.d(TAG, "fromListToMap: ${it}")
-//            }
-
-
-
-
-
-//            dataApi.weatherDataPerDay?.forEach {
-//                it.value.forEach {
-//                    //Log.d(TAG, "api: ${it}")
-//                    dao.insertWeatherInfos(it)
-//                }
-//            }
-
-//            coroutineScope {
-//                launch(Dispatchers.IO) {
-//                 val x = dao.gettWeatherInfos().first().groupBy { it.time.dayOfMonth}
-//                 Log.d(TAG, "getWeatherInfo: ${x.size}")
-//                 x.forEach { Log.d(TAG, "getWeatherInfo: $it") }
-//                }
-//            }
-
-
 
         }catch (e: Exception) {
             e.printStackTrace()

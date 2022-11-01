@@ -1,12 +1,8 @@
 package com.hasan.weatherapp.presentation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.hasan.weatherapp.R
 import com.hasan.weatherapp.databinding.ListItemBinding
 import com.hasan.weatherapp.domain.weather.WeatherData
 import java.time.format.DateTimeFormatter
@@ -40,12 +36,4 @@ class HourlyWeatherAdapter : RecyclerView.Adapter<HourlyWeatherAdapter.ViewHolde
 
     inner class ViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
-//    class ViewHolder(binding: ListItemBinding) : RecyclerView.ViewHolder(itemView){
-//
-//        val time: TextView = itemView.findViewById(R.id.time)
-////        val sleepLength: TextView = itemView.findViewById(R.id.sleep_length)
-////        val quality: TextView = itemView.findViewById(R.id.quality_string)
-////        val qualityImage: ImageView = itemView.findViewById(R.id.quality_image)
-//
-//    }
 }
